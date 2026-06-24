@@ -1,61 +1,85 @@
 ---
-name: 💡 Feature Request
-about: Suggest an idea or improvement for this project
-title: 'feat: '
-labels: enhancement
+name: Bug report
+about: Create a report to help us improve
+title: "[BUG]"
+labels: bug
+assignees: daonware-it
+
+---
+
+---
+name: 🐛 Bug Report
+about: Something is not working as expected
+title: 'bug: '
+labels: bug
 assignees: ''
 ---
 
-## 💡 Summary
-<!-- A short one-line summary of the feature you'd like to see. -->
+## 🐛 Describe the Bug
+<!-- A clear and concise description of what the bug is. -->
 
 
 ---
 
-## 🔍 Problem / Motivation
-<!-- Is your feature request related to a problem? Describe it clearly. -->
-<!-- e.g. "I always have to scroll through 50 videos to find the one with the worst ratio..." -->
+## ✅ Expected Behavior
+<!-- What did you expect to happen? -->
 
 
 ---
 
-## ✨ Proposed Solution
-<!-- Describe what you'd like to happen. Be as specific as possible. -->
+## ❌ Actual Behavior
+<!-- What actually happened instead? -->
 
 
 ---
 
-## 🔄 Alternatives Considered
-<!-- Have you considered any alternative approaches or workarounds? -->
+## 🔁 Steps to Reproduce
 
-
----
-
-## 📍 Where Should This Appear?
-
-<!-- Check all that apply -->
-- [ ] Videos tab (Inhalte des Kanals)
-- [ ] Shorts tab
-- [ ] Livestreams tab
-- [ ] Single video page
-- [ ] Extension popup / Dashboard
-- [ ] Other: ___
+1. Go to `https://studio.youtube.com/...`
+2. Click on '...'
+3. See error
 
 ---
 
-## 🖼️ Mockup / Example
-<!-- Optional: sketch, screenshot, or example from another tool that shows what you mean. -->
+## 🖥️ Environment
+
+| | |
+|---|---|
+| **Chrome / Browser Version** | e.g. Chrome 125.0.6422.112 |
+| **Extension Version** | e.g. v1.0.0 (visible in chrome://extensions) |
+| **Operating System** | e.g. Windows 11, macOS 14 |
+| **YouTube Studio Tab** | Videos / Shorts / Livestreams |
+
+---
+
+## 🐛 Debug Output
+
+<!-- 
+  Please enable Debug Mode first:
+  1. Click the extension icon
+  2. Toggle "Debug" on
+  3. Reload the YouTube Studio Content tab
+  4. Open browser console (F12)
+  5. Filter by [YTSR]
+  6. Paste the output below
+-->
+
+<details>
+<summary>Console output (filter: [YTSR])</summary>
+
+```
+paste output here
+```
+
+</details>
+
+---
+
+## 📸 Screenshots
+<!-- If applicable, add screenshots to help explain the problem. -->
 
 
 ---
 
 ## 📝 Additional Context
-<!-- Any other context, links, or references that might help. -->
-
-
----
-
-## ✅ Checklist
-
-- [ ] I searched existing issues and this has not been requested before
-- [ ] This feature fits the scope of the extension (YouTube Studio Like/Dislike ratio)
+<!-- Any other context about the problem? e.g. Does it happen on all videos or only specific ones? -->
