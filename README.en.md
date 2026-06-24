@@ -49,25 +49,6 @@ YouTube changes its internal endpoints without warning. If nothing shows up:
 
 Send me the console output and I'll fine-tune the field mapping exactly.
 
-## Publishing so everyone can use it
-
-- **Chrome Web Store:** create a developer account (one-time $5 fee), upload the
-  folder as a ZIP, fill in the store listing + privacy notice, wait for review.
-- **Firefox (AMO):** upload the ZIP at `addons.mozilla.org` and get it signed.
-
-You can keep the privacy text short: "Reads only the like/dislike data of the
-signed-in channel in YouTube Studio, locally. No data is stored or transmitted."
-
-## Limits / honesty
-
-- Relies on undocumented Studio interfaces → may break after a YouTube update and
-  then needs an adjustment.
-- If YouTube stops including the like/dislike numbers in the content responses at
-  all, it would have to switch to the official YouTube Analytics API — that is
-  stable, but requires OAuth per user and is not ideal for "everyone, no setup".
-- This code is a tested-and-structured foundation, but not verified against the
-  live page. Plan for initial fine-tuning via debug mode.
-
 ## Current state (v0.7.0)
 
 - Shows a **like badge** (👍 number) per video in the content tab. The fields are
