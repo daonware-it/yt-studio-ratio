@@ -3,10 +3,11 @@
 **Deutsch** · [English](README.en.md)
 
 Eine kleine Browser-Erweiterung, die das **Like/Dislike-Verhältnis im Inhalte-Tab
-von YouTube Studio** wieder sichtbar macht. Pro Video erscheint ein Badge wie
-`👍 92,4 %` (mit den genauen Zahlen im Tooltip).
+von YouTube Studio** wieder sichtbar macht – in einer **eigenen Spalte „Likes
+(vs. Dislikes)"** ganz rechts, mit 👍/👎-Zahlen, Verhältnis-Balken und Prozent
+(genaue Zahlen zusätzlich im Tooltip).
 
-![Like/Dislike-Badges im Inhalte-Tab von YouTube Studio](IMAGE/content-badges.png)
+![Like/Dislike-Spalte im Inhalte-Tab von YouTube Studio](IMAGE/content-badges.png)
 
 <p align="center">
   <img src="IMAGE/popup-de.png" alt="Einstellungs-Popup (Deutsch)" width="280">
@@ -37,35 +38,36 @@ von YouTube Studio** wieder sichtbar macht. Pro Video erscheint ein Badge wie
 2. „Temporäres Add-on laden" → `manifest.json` auswählen
    (Für dauerhafte Nutzung muss das Add-on bei AMO signiert werden.)
 
-## Wenn kein Badge erscheint (Debug)
+## Wenn nichts erscheint (Debug)
 
-YouTube ändert die internen Endpunkte ohne Vorwarnung. Falls nichts auftaucht:
+YouTube ändert die internen Endpunkte ohne Vorwarnung. Falls die Spalte leer
+bleibt:
 
 1. Auf das Erweiterungs-Icon klicken → **Debug-Modus** einschalten
 2. Inhalte-Tab neu laden, Entwicklerkonsole öffnen (F12)
-3. Nach `[YTSR]` filtern. Dort werden die rohen Payloads ausgegeben.
-4. In `src/inject.js` die Listen `LIKE_KEYS`, `DISLIKE_KEYS` und `VIDEO_ID_KEYS`
-   um die tatsächlich gefundenen Feldnamen ergänzen.
+3. Nach `[YTSR]` filtern. Dort werden die erkannten Felder und rohen Payloads
+   ausgegeben (u. a. `[YTSR][recon]` und `[YTSR][dislike-DATA]`).
 
 Schick mir die Konsolen-Ausgabe, dann passe ich die Feld-Zuordnung exakt an.
 
-## Aktueller Stand (v0.7.0)
+## Aktueller Stand (v1.0.0)
 
-- Zeigt pro Video im Inhalte-Tab ein **Like-Badge** (👍 Zahl). Die Felder sind
-  fest verdrahtet: `videos[].videoId` + `videos[].publicMetrics.likeCount`.
-- **Dislikes/Verhältnis sind noch nicht dabei**: YouTube liefert die Dislike-Zahl
-  nicht im Inhalte-Endpunkt. Das kommt später über die YouTube-Analytics-API
-  (dann wird aus dem Like-Badge ein echtes Verhältnis).
-- Wenn kein Badge erscheint: im Popup **Debug** an, Inhalte-Tab neu laden, Konsole
-  nach `[YTSR]` filtern. `[YTSR] N Video(s) mit Likes erkannt.` heißt: Daten da.
+- Fügt im Inhalte-Tab eine **eigene Spalte „Likes (vs. Dislikes)"** ganz rechts
+  nach „Kommentare" ein – Titel in der Kopfzeile, pro Video eine Zelle mit
+  👍/👎-Zahlen, **Verhältnis-Balken** und Prozent.
+- **Likes** kommen aus `videos[].publicMetrics.likeCount`, **Dislikes** werden
+  aktiv über den Studio-eigenen Endpunkt nachgeladen (`get_creator_videos`,
+  `metrics.dislikeCount`) – alles in deiner laufenden Sitzung, ohne Zusatzrechte.
+- Bis die Dislikes geladen sind, zeigt die Zelle den Like-Wert mit dezentem
+  Lade-Zustand; danach erscheint das echte Verhältnis.
 
 ## Dateien
 
 ```
 manifest.json        – Konfiguration (Manifest V3)
-src/inject.js        – liest die Netzwerk-Antworten der Seite mit
-src/content.js       – baut die Badges in die Video-Zeilen ein
-src/styles.css       – Aussehen der Badges
+src/inject.js        – liest die Netzwerk-Antworten der Seite mit (Likes/Dislikes)
+src/content.js       – baut die Spalte in Kopfzeile und Video-Zeilen ein
+src/styles.css       – Aussehen der Spalte (Balken, Abstände)
 popup/               – kleines Einstellungs-Popup (An/Aus, Debug)
 icons/               – Icons
 ```

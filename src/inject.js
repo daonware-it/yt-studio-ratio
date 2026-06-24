@@ -1,5 +1,5 @@
 /*
- * inject.js (Main World) - Version 0.7.0
+ * inject.js (Main World) - Version 1.0.0
  * Likes: passiv aus videos[].publicMetrics.likeCount (list_creator_videos).
  * Dislikes: aktiv nachgeladen. Wir spiegeln den Studio-eigenen Request
  *   POST /youtubei/v1/creator/get_creator_videos
@@ -11,7 +11,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "0.7.0"; // MAIN-World hat keinen chrome.runtime-Zugriff -> hier pflegen
+  const VERSION = "1.0.0"; // MAIN-World hat keinen chrome.runtime-Zugriff -> hier pflegen
   const DEBUG_KEY = "__ytsr_debug";
   const isDebug = () => window[DEBUG_KEY] === true;
   const shouldWatch = (url) => !!url && String(url).includes("youtubei");

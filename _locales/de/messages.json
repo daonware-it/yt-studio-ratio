@@ -18,7 +18,15 @@
     "message": "Anzeige aktiv"
   },
   "displayActiveHint": {
-    "message": "Badge im Inhalte-Tab"
+    "message": "Spalte im Inhalte-Tab"
+  },
+  "columnHeader": {
+    "message": "Likes (vs. Dislikes)",
+    "description": "Kopfzeile der eingefügten Tabellenspalte."
+  },
+  "columnLoading": {
+    "message": "Dislikes werden geladen …",
+    "description": "Tooltip, solange die Dislikes noch nicht vorliegen."
   },
   "debugMode": {
     "message": "Debug-Modus"

@@ -3,10 +3,11 @@
 [Deutsch](README.md) · **English**
 
 A small browser extension that brings back the **like/dislike ratio in the
-YouTube Studio content tab**. Each video gets a badge like `👍 92.4 %` (with the
-exact numbers in the tooltip).
+YouTube Studio content tab** — in its own **"Likes (vs. Dislikes)" column** on
+the far right, with 👍/👎 numbers, a ratio bar and percentage (exact numbers also
+in the tooltip).
 
-![Like/dislike badges in the YouTube Studio content tab](IMAGE/content-badges.png)
+![Like/dislike column in the YouTube Studio content tab](IMAGE/content-badges.png)
 
 <p align="center">
   <img src="IMAGE/popup-en.png" alt="Settings popup (English)" width="280">
@@ -37,36 +38,36 @@ exact numbers in the tooltip).
 2. "Load Temporary Add-on" → select `manifest.json`
    (For permanent use the add-on must be signed on AMO.)
 
-## When no badge appears (debug)
+## When nothing appears (debug)
 
-YouTube changes its internal endpoints without warning. If nothing shows up:
+YouTube changes its internal endpoints without warning. If the column stays
+empty:
 
 1. Click the extension icon → turn on **Debug mode**
 2. Reload the Content tab, open the developer console (F12)
-3. Filter for `[YTSR]`. The raw payloads are printed there.
-4. In `src/inject.js`, extend the lists `LIKE_KEYS`, `DISLIKE_KEYS` and
-   `VIDEO_ID_KEYS` with the field names you actually find.
+3. Filter for `[YTSR]`. The detected fields and raw payloads are printed there
+   (incl. `[YTSR][recon]` and `[YTSR][dislike-DATA]`).
 
 Send me the console output and I'll fine-tune the field mapping exactly.
 
-## Current state (v0.7.0)
+## Current state (v1.0.0)
 
-- Shows a **like badge** (👍 number) per video in the content tab. The fields are
-  hard-wired: `videos[].videoId` + `videos[].publicMetrics.likeCount`.
-- **Dislikes/ratio are not included yet**: YouTube does not deliver the dislike
-  number in the content endpoint. That will come later via the YouTube Analytics
-  API (then the like badge becomes a real ratio).
-- If no badge appears: turn on **Debug** in the popup, reload the content tab,
-  filter the console for `[YTSR]`. `[YTSR] N video(s) with likes detected.` means
-  the data is there.
+- Adds its own **"Likes (vs. Dislikes)" column** on the far right of the content
+  tab, after "Comments" — title in the header, one cell per video with 👍/👎
+  numbers, a **ratio bar** and percentage.
+- **Likes** come from `videos[].publicMetrics.likeCount`; **dislikes** are
+  actively fetched via Studio's own endpoint (`get_creator_videos`,
+  `metrics.dislikeCount`) — all within your running session, no extra permissions.
+- Until the dislikes arrive, the cell shows the like value in a subtle loading
+  state; the real ratio appears afterwards.
 
 ## Files
 
 ```
 manifest.json        – configuration (Manifest V3)
-src/inject.js        – reads the page's network responses
-src/content.js       – builds the badges into the video rows
-src/styles.css       – appearance of the badges
+src/inject.js        – reads the page's network responses (likes/dislikes)
+src/content.js       – builds the column into the header and video rows
+src/styles.css       – appearance of the column (bar, spacing)
 popup/               – small settings popup (on/off, debug)
 icons/               – icons
 ```

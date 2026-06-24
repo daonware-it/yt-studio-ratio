@@ -18,7 +18,15 @@
     "message": "Display active"
   },
   "displayActiveHint": {
-    "message": "Badge in the Content tab"
+    "message": "Column in the Content tab"
+  },
+  "columnHeader": {
+    "message": "Likes (vs. Dislikes)",
+    "description": "Header of the injected table column."
+  },
+  "columnLoading": {
+    "message": "Loading dislikes …",
+    "description": "Tooltip while dislikes are not loaded yet."
   },
   "debugMode": {
     "message": "Debug mode"
