@@ -1,0 +1,32 @@
+{
+  "extName": {
+    "message": "YT Studio Like/Dislike Ratio",
+    "description": "Extension name shown in the store and browser."
+  },
+  "extDesc": {
+    "message": "Brings likes, dislikes and the like/dislike ratio back to the YouTube Studio Content tab — from your own session only.",
+    "description": "Short store description (max 132 characters)."
+  },
+  "actionTitle": {
+    "message": "Like/Dislike Ratio",
+    "description": "Toolbar button tooltip."
+  },
+  "popupHeader": {
+    "message": "Like / Dislike Ratio"
+  },
+  "displayActive": {
+    "message": "Display active"
+  },
+  "displayActiveHint": {
+    "message": "Badge in the Content tab"
+  },
+  "debugMode": {
+    "message": "Debug mode"
+  },
+  "debugModeHint": {
+    "message": "Raw data to the console"
+  },
+  "footerHint": {
+    "message": "Shows data from your own signed-in channel only. Reload the Content tab if nothing appears."
+  }
+}

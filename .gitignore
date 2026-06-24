@@ -1,0 +1,10 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Build artifacts
+*.zip
+node_modules/

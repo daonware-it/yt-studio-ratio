@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { width: 260px; margin: 0; font: 13px/1.5 "Roboto", Arial, sans-serif; color: #0f0f0f; }
+    header { background: #cc0000; color: #fff; padding: 12px 14px; font-weight: 600; }
+    .body { padding: 14px; }
+    .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .hint { font-size: 11px; color: #606060; margin-top: 2px; }
+    label.switch { position: relative; display: inline-block; width: 38px; height: 22px; }
+    label.switch input { display: none; }
+    .slider { position: absolute; inset: 0; background: #ccc; border-radius: 22px; transition: .2s; }
+    .slider::before { content: ""; position: absolute; height: 16px; width: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+    input:checked + .slider { background: #2ba640; }
+    input:checked + .slider::before { transform: translateX(16px); }
+    a { color: #065fd4; }
+  </style>
+</head>
+<body>
+  <header data-i18n="popupHeader">Like / Dislike Ratio</header>
+  <div class="body">
+    <div class="row">
+      <div>
+        <div data-i18n="displayActive">Display active</div>
+        <div class="hint" data-i18n="displayActiveHint">Badge in the Content tab</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="enabled" checked /><span class="slider"></span></label>
+    </div>
+    <div class="row">
+      <div>
+        <div data-i18n="debugMode">Debug mode</div>
+        <div class="hint" data-i18n="debugModeHint">Raw data to the console</div>
+      </div>
+      <label class="switch"><input type="checkbox" id="debug" /><span class="slider"></span></label>
+    </div>
+    <div class="hint" data-i18n="footerHint">
+      Shows data from your own signed-in channel only. Reload the Content tab if nothing appears.
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

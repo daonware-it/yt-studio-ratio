@@ -1,0 +1,32 @@
+{
+  "extName": {
+    "message": "YT Studio Like/Dislike Ratio",
+    "description": "Im Store und Browser angezeigter Name."
+  },
+  "extDesc": {
+    "message": "Holt Likes, Dislikes und das Like/Dislike-Verhältnis zurück in den Inhalte-Tab von YouTube Studio – nur aus deiner eigenen Sitzung.",
+    "description": "Kurzbeschreibung für den Store (max. 132 Zeichen)."
+  },
+  "actionTitle": {
+    "message": "Like/Dislike-Verhältnis",
+    "description": "Tooltip des Symbolleisten-Buttons."
+  },
+  "popupHeader": {
+    "message": "Like / Dislike Ratio"
+  },
+  "displayActive": {
+    "message": "Anzeige aktiv"
+  },
+  "displayActiveHint": {
+    "message": "Badge im Inhalte-Tab"
+  },
+  "debugMode": {
+    "message": "Debug-Modus"
+  },
+  "debugModeHint": {
+    "message": "Roh-Daten in die Konsole"
+  },
+  "footerHint": {
+    "message": "Zeigt nur die Daten deines eigenen, angemeldeten Kanals. Lade den Inhalte-Tab neu, falls nichts erscheint."
+  }
+}

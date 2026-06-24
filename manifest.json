@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "default_locale": "en",
+  "name": "__MSG_extName__",
+  "version": "0.7.0",
+  "description": "__MSG_extDesc__",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "__MSG_actionTitle__",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://studio.youtube.com/*"],
+      "js": ["src/inject.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://studio.youtube.com/*"],
+      "js": ["src/content.js"],
+      "css": ["src/styles.css"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "permissions": ["storage"],
+  "host_permissions": ["https://studio.youtube.com/*"]
+}
