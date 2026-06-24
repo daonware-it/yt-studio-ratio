@@ -1,63 +1,61 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: "[BUG]"
-labels: bug
-assignees: daonware-it
-
----
-
----
-name: ⚠️ YouTube Endpoint Changed
-about: Badges are not showing after a YouTube Studio update
-title: 'fix: badges not showing after YouTube update'
-labels: youtube-update, bug
+name: 💡 Feature Request
+about: Suggest an idea or improvement for this project
+title: 'feat: '
+labels: enhancement
 assignees: ''
 ---
 
-## ⚠️ Badges Stopped Showing After a YouTube Update
-
-<!-- This is the most common issue with this extension. 
-     YouTube changes their internal endpoints without notice.
-     Please follow the steps below carefully. -->
-
----
-
-## 🔍 Debug Output
-
-**Follow these steps first:**
-
-1. Click the extension icon → toggle **Debug** on
-2. Go to `https://studio.youtube.com` → open the **Content** tab
-3. Open browser console (`F12`) and filter by `[YTSR]`
-4. Paste **all** `[YTSR]` output below:
-
-<details>
-<summary>[YTSR] console output</summary>
-
-```
-paste here
-```
-
-</details>
-
----
-
-## 🖥️ Environment
-
-| | |
-|---|---|
-| **Chrome Version** | e.g. Chrome 126.0.6478.56 |
-| **Extension Version** | e.g. v1.0.0 |
-| **Date noticed** | e.g. 2026-06-24 |
-
----
-
-## 📝 Additional Notes
-<!-- Did anything else change? Did YouTube Studio look different? -->
+## 💡 Summary
+<!-- A short one-line summary of the feature you'd like to see. -->
 
 
 ---
 
-> 💡 **For maintainers:** Check `LIKE_KEYS`, `DISLIKE_KEYS`, and `VIDEO_ID_KEYS`
-> in `src/inject.js` against the raw payload shown in the debug output.
+## 🔍 Problem / Motivation
+<!-- Is your feature request related to a problem? Describe it clearly. -->
+<!-- e.g. "I always have to scroll through 50 videos to find the one with the worst ratio..." -->
+
+
+---
+
+## ✨ Proposed Solution
+<!-- Describe what you'd like to happen. Be as specific as possible. -->
+
+
+---
+
+## 🔄 Alternatives Considered
+<!-- Have you considered any alternative approaches or workarounds? -->
+
+
+---
+
+## 📍 Where Should This Appear?
+
+<!-- Check all that apply -->
+- [ ] Videos tab (Inhalte des Kanals)
+- [ ] Shorts tab
+- [ ] Livestreams tab
+- [ ] Single video page
+- [ ] Extension popup / Dashboard
+- [ ] Other: ___
+
+---
+
+## 🖼️ Mockup / Example
+<!-- Optional: sketch, screenshot, or example from another tool that shows what you mean. -->
+
+
+---
+
+## 📝 Additional Context
+<!-- Any other context, links, or references that might help. -->
+
+
+---
+
+## ✅ Checklist
+
+- [ ] I searched existing issues and this has not been requested before
+- [ ] This feature fits the scope of the extension (YouTube Studio Like/Dislike ratio)
