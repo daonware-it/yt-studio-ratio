@@ -49,28 +49,6 @@ YouTube ändert die internen Endpunkte ohne Vorwarnung. Falls nichts auftaucht:
 
 Schick mir die Konsolen-Ausgabe, dann passe ich die Feld-Zuordnung exakt an.
 
-## Veröffentlichen, damit es jeder nutzen kann
-
-- **Chrome Web Store:** Entwicklerkonto anlegen (einmalig 5 $ Gebühr), den Ordner
-  als ZIP hochladen, Store-Eintrag + Datenschutzhinweis ausfüllen, Review abwarten.
-- **Firefox (AMO):** ZIP bei `addons.mozilla.org` hochladen, signieren lassen.
-
-Den Datenschutztext kannst du knapp halten: „Liest ausschließlich lokal die
-Like/Dislike-Daten des angemeldeten Kanals in YouTube Studio. Es werden keine
-Daten gespeichert oder übertragen."
-
-## Grenzen / Ehrlichkeit
-
-- Beruht auf nicht-dokumentierten Studio-Schnittstellen → kann nach einem
-  YouTube-Update brechen und braucht dann eine Anpassung.
-- Wenn YouTube die Like/Dislike-Zahlen gar nicht mehr in die Inhalte-Antworten
-  packt, müsste auf die offizielle YouTube-Analytics-API umgestellt werden – die
-  ist stabil, erfordert aber pro Nutzer OAuth und ist für „jeden ohne Setup"
-  nicht ideal.
-- Dieser Code ist ein getestet-strukturiertes Grundgerüst, aber nicht gegen die
-  Live-Seite verifiziert. Erste Feinjustierung über den Debug-Modus einplanen.
-
-
 ## Aktueller Stand (v0.7.0)
 
 - Zeigt pro Video im Inhalte-Tab ein **Like-Badge** (👍 Zahl). Die Felder sind
