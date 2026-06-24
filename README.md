@@ -4,6 +4,14 @@ Eine kleine Browser-Erweiterung, die das **Like/Dislike-Verhältnis im Inhalte-T
 von YouTube Studio** wieder sichtbar macht. Pro Video erscheint ein Badge wie
 `👍 92,4 %` (mit den genauen Zahlen im Tooltip).
 
+![Like/Dislike-Badges im Inhalte-Tab von YouTube Studio](IMAGE/content-badges.png)
+
+<p align="center">
+  <img src="IMAGE/popup-de.png" alt="Einstellungs-Popup (Deutsch)" width="280">
+  &nbsp;&nbsp;
+  <img src="IMAGE/popup-en.png" alt="Settings popup (English)" width="280">
+</p>
+
 ## Wie es funktioniert (und warum es unbedenklich ist)
 
 - Die Erweiterung läuft nur auf `studio.youtube.com`.
