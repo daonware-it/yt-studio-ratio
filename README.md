@@ -1,5 +1,7 @@
 # YT Studio Like/Dislike Ratio
 
+**Deutsch** · [English](README.en.md)
+
 Eine kleine Browser-Erweiterung, die das **Like/Dislike-Verhältnis im Inhalte-Tab
 von YouTube Studio** wieder sichtbar macht. Pro Video erscheint ein Badge wie
 `👍 92,4 %` (mit den genauen Zahlen im Tooltip).
@@ -69,7 +71,7 @@ Daten gespeichert oder übertragen."
   Live-Seite verifiziert. Erste Feinjustierung über den Debug-Modus einplanen.
 
 
-## Aktueller Stand (v0.3.0)
+## Aktueller Stand (v0.7.0)
 
 - Zeigt pro Video im Inhalte-Tab ein **Like-Badge** (👍 Zahl). Die Felder sind
   fest verdrahtet: `videos[].videoId` + `videos[].publicMetrics.likeCount`.
