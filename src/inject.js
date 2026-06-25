@@ -1,5 +1,5 @@
 /*
- * inject.js (Main World) - Version 1.0.0
+ * inject.js (Main World) - Version 1.1.0
  * Likes: passiv aus videos[].publicMetrics.likeCount (list_creator_videos).
  * Dislikes: aktiv nachgeladen. Wir spiegeln den Studio-eigenen Request
  *   POST /youtubei/v1/creator/get_creator_videos
@@ -11,7 +11,7 @@
 (function () {
   "use strict";
 
-  const VERSION = "1.0.0"; // MAIN-World hat keinen chrome.runtime-Zugriff -> hier pflegen
+  const VERSION = "1.1.0"; // MAIN-World hat keinen chrome.runtime-Zugriff -> hier pflegen
   const DEBUG_KEY = "__ytsr_debug";
   const isDebug = () => window[DEBUG_KEY] === true;
   const shouldWatch = (url) => !!url && String(url).includes("youtubei");
@@ -21,6 +21,7 @@
   // aktiven Dislike-Abruf). Wird laufend aus echten youtubei-Requests aufgefrischt.
   let lastAuth = null;
   const pendingDislikeIds = []; // IDs, die warten, bis Auth vorliegt
+  const pendingSubIds = [];     // dito fuer den Abo-Abruf
 
   function pathOf(url) {
     try { return new URL(url, location.origin).pathname; }
@@ -83,6 +84,7 @@
       lastAuth = { url: String(url), headers, context };
       try { window.__ytsr_auth = lastAuth; } catch (e) {}
       if (pendingDislikeIds.length) doFetchDislikes(pendingDislikeIds.splice(0));
+      if (pendingSubIds.length) doFetchSubscribers(pendingSubIds.splice(0));
     } catch (e) {}
   }
 
@@ -90,6 +92,25 @@
     let search = "";
     try { search = new URL(lastAuth.url, location.origin).search; } catch (e) {}
     return location.origin + "/youtubei/v1/creator/" + endpoint + search;
+  }
+
+  function buildYtaUrl(endpoint) {
+    let search = "";
+    try { search = new URL(lastAuth.url, location.origin).search; } catch (e) {}
+    return location.origin + "/youtubei/v1/yta_web/" + endpoint + search;
+  }
+
+  // Findet im Analytics-Payload den numerischen Wert (total) der gesuchten Metrik.
+  function findMetricTotal(node, metric, depth) {
+    depth = depth || 0;
+    if (depth > 22 || node == null || typeof node !== "object") return null;
+    if (Array.isArray(node)) {
+      for (const v of node) { const r = findMetricTotal(v, metric, depth + 1); if (r != null) return r; }
+      return null;
+    }
+    if (node.metric === metric && typeof node.total === "number") return node.total;
+    for (const k of Object.keys(node)) { const r = findMetricTotal(node[k], metric, depth + 1); if (r != null) return r; }
+    return null;
   }
 
   async function doFetchDislikes(ids) {
@@ -123,6 +144,59 @@
         emit(sink);
       } catch (e) {
         if (isDebug()) console.log("[YTSR] Dislike-Abruf fehlgeschlagen:", e);
+      }
+    }
+  }
+
+  // ----- Aktiver Abo-Abruf (Analytics) --------------------------------------
+  // Netto-Abos seit Veroeffentlichung pro Video. Anders als Dislikes kennt der
+  // Analytics-Endpunkt nur EINE videoId pro Anfrage -> sequenziell & sparsam,
+  // nur fuer sichtbare Videos (von content.js gesteuert).
+  async function doFetchSubscribers(ids) {
+    ids = Array.from(new Set(ids.filter(Boolean)));
+    if (!ids.length) return;
+    if (!lastAuth) { // Auth noch nicht gesehen -> spaeter nachholen
+      for (const id of ids) if (!pendingSubIds.includes(id)) pendingSubIds.push(id);
+      return;
+    }
+    let tz = 0;
+    try { tz = -new Date().getTimezoneOffset() * 60; } catch (e) {}
+    for (const id of ids) {
+      try {
+        const headers = Object.assign({}, lastAuth.headers);
+        delete headers["content-length"]; delete headers["Content-Length"];
+        headers["content-type"] = "application/json";
+        const body = JSON.stringify({
+          context: lastAuth.context,
+          screenConfig: {
+            entity: { videoId: id },
+            timePeriod: {
+              referencePoint: "TIME_PERIOD_REFERENCE_POINT_SINCE_PUBLISH",
+              timePeriodType: "ANALYTICS_TIME_PERIOD_TYPE_SINCE_PUBLISH",
+              entity: { videoId: id }
+            },
+            currency: "USD",
+            timeZoneOffsetSecs: tz
+          },
+          cardConfigs: [{
+            autoUpdateInterval: "ANALYTICS_AUTO_UPDATE_INTERVAL_NEVER",
+            keyMetricCardConfig: { timePeriod: {}, metricTabConfigs: [{ metric: "SUBSCRIBERS_NET_CHANGE" }] },
+            failureMode: "ANALYTICS_CARD_FAILURE_MODE_FAIL_PAGE"
+          }]
+        });
+        const res = await origFetch(buildYtaUrl("get_cards"), {
+          method: "POST", credentials: "include", headers, body
+        });
+        const json = JSON.parse(await res.text());
+        const total = findMetricTotal(json, "SUBSCRIBERS_NET_CHANGE", 0);
+        if (total != null) {
+          if (isDebug()) console.log("[YTSR] Abos (netto, seit Upload) " + id + ": " + total);
+          emit([{ videoId: id, subscribers: total }]);
+        } else if (isDebug()) {
+          console.log("[YTSR] Abo-Wert nicht gefunden fuer " + id);
+        }
+      } catch (e) {
+        if (isDebug()) console.log("[YTSR] Abo-Abruf fehlgeschlagen:", e);
       }
     }
   }
@@ -249,6 +323,12 @@
   window.addEventListener("ytsr:fetchDislikes", (e) => {
     const ids = (e.detail && e.detail.videoIds) || [];
     if (ids.length) doFetchDislikes(ids);
+  });
+
+  // Aufforderung aus der isolierten Welt: Netto-Abos fuer diese Video-IDs holen.
+  window.addEventListener("ytsr:fetchSubscribers", (e) => {
+    const ids = (e.detail && e.detail.videoIds) || [];
+    if (ids.length) doFetchSubscribers(ids);
   });
 
   console.log("[YTSR] Netzwerk-Mitleser aktiv (v" + VERSION + ", MAIN-World).");

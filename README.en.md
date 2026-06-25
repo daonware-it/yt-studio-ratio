@@ -5,7 +5,8 @@
 A small browser extension that brings back the **like/dislike ratio in the
 YouTube Studio content tab** — in its own **"Likes (vs. Dislikes)" column** on
 the far right, with 👍/👎 numbers, a ratio bar and percentage (exact numbers also
-in the tooltip).
+in the tooltip). A second **"Subscribers (total)" column** also shows how many
+subscribers each video gained net since it was published.
 
 ![Like/dislike column in the YouTube Studio content tab](IMAGE/content-badges.png)
 
@@ -25,17 +26,32 @@ in the tooltip).
 - Everyone only ever sees the data of **their own signed-in channel** — because
   the extension simply uses the existing session.
 
+## Build
+
+The extension is **Manifest V3** and runs in both Chrome and Firefox. Because
+Firefox additionally requires `browser_specific_settings` (which Chrome rejects),
+a small build script produces a per-browser package under `dist/` (only Node.js
+needed, no dependencies):
+
+```
+npm run build           # builds dist/chrome and dist/firefox
+npm run build:chrome    # Chrome only
+npm run build:firefox   # Firefox only
+```
+
 ## Install locally (for testing)
 
 **Chrome / Edge / Brave**
-1. Open `chrome://extensions`
-2. Enable "Developer mode" in the top right
-3. "Load unpacked" → select this folder
-4. Open `studio.youtube.com` → Content, reload the page if needed
+1. Run `npm run build:chrome`
+2. Open `chrome://extensions`
+3. Enable "Developer mode" in the top right
+4. "Load unpacked" → select the `dist/chrome` folder
+5. Open `studio.youtube.com` → Content, reload the page if needed
 
-**Firefox**
-1. `about:debugging#/runtime/this-firefox`
-2. "Load Temporary Add-on" → select `manifest.json`
+**Firefox** (version 128 or newer)
+1. Run `npm run build:firefox`
+2. `about:debugging#/runtime/this-firefox`
+3. "Load Temporary Add-on" → select `dist/firefox/manifest.json`
    (For permanent use the add-on must be signed on AMO.)
 
 ## When nothing appears (debug)
@@ -50,11 +66,19 @@ empty:
 
 Send me the console output and I'll fine-tune the field mapping exactly.
 
-## Current state (v1.0.0)
+## Current state (v1.1.0)
 
 - Adds its own **"Likes (vs. Dislikes)" column** on the far right of the content
   tab, after "Comments" — title in the header, one cell per video with 👍/👎
-  numbers, a **ratio bar** and percentage.
+  numbers, a **two-color ratio bar** (green = likes, red = dislikes) and
+  percentage.
+- Additional **"Subscribers (total)" column**: net subscribers gained per video
+  since publication — green for gains, red for losses. Values are fetched
+  sparingly and only for visible videos via Studio's analytics endpoint
+  (`yta_web/get_cards`, metric `SUBSCRIBERS_NET_CHANGE`).
+- **Readable numbers**: large values compact (`49.3K`, `2.1M`), smaller ones
+  exact with thousands separators (`1,204`); bold, evenly-spaced digits.
+- Runs in **Chrome and Firefox** (per-browser packages via `npm run build`).
 - **Likes** come from `videos[].publicMetrics.likeCount`; **dislikes** are
   actively fetched via Studio's own endpoint (`get_creator_videos`,
   `metrics.dislikeCount`) — all within your running session, no extra permissions.
@@ -64,10 +88,11 @@ Send me the console output and I'll fine-tune the field mapping exactly.
 ## Files
 
 ```
-manifest.json        – configuration (Manifest V3)
-src/inject.js        – reads the page's network responses (likes/dislikes)
-src/content.js       – builds the column into the header and video rows
-src/styles.css       – appearance of the column (bar, spacing)
+manifest.json        – configuration (Manifest V3, Chrome base)
+scripts/build.mjs    – produces per-browser packages in dist/
+src/inject.js        – reads network responses & fetches dislikes/subscribers
+src/content.js       – builds both columns into the header and video rows
+src/styles.css       – appearance of the columns (bar, colors, spacing)
 popup/               – small settings popup (on/off, debug)
 icons/               – icons
 ```

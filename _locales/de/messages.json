@@ -28,6 +28,18 @@
     "message": "Dislikes werden geladen …",
     "description": "Tooltip, solange die Dislikes noch nicht vorliegen."
   },
+  "columnHeaderSubs": {
+    "message": "Abos (gesamt)",
+    "description": "Kopfzeile der Abo-Spalte."
+  },
+  "columnLoadingSubs": {
+    "message": "Abos werden geladen …",
+    "description": "Tooltip, solange die Abo-Zahl noch nicht vorliegt."
+  },
+  "subsTooltip": {
+    "message": "Abonnenten (netto, seit Veröffentlichung)",
+    "description": "Tooltip-Erläuterung der Abo-Zahl."
+  },
   "debugMode": {
     "message": "Debug-Modus"
   },

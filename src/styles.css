@@ -7,9 +7,11 @@
 
 :root {
   --ytsr-col-width: 150px;
-  --ytsr-col-gap: 50px;   /* Abstand zwischen "Kommentare" und unserer Spalte */
-  --ytsr-like: #2ba640;   /* Studio-Grün für den Like-Anteil */
-  --ytsr-dislike: #909090;
+  --ytsr-col-gap: 50px;     /* Abstand zwischen "Kommentare" und unserer Spalte */
+  --ytsr-subs-width: 120px; /* Breite der Abo-Spalte */
+  --ytsr-subs-gap: 24px;    /* Abstand zwischen Like- und Abo-Spalte */
+  --ytsr-like: #2ba640;    /* Studio-Grün für den Like-Anteil */
+  --ytsr-dislike: #e53935; /* Rot für den Dislike-Anteil */
 }
 
 /*
@@ -59,9 +61,13 @@ ytcp-table-header .tablecell-video {
 .ytsr-cell .ytsr-nums {
   white-space: nowrap;
   letter-spacing: 0.2px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0b0b0b;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Verhältnis-Balken: grauer Track, grüner Like-Anteil. */
+/* Verhältnis-Balken: roter Track (Dislikes), grüner Like-Anteil darüber. */
 .ytsr-cell .ytsr-bar {
   position: relative;
   width: 100%;
@@ -81,9 +87,29 @@ ytcp-table-header .tablecell-video {
 }
 
 .ytsr-cell .ytsr-pct {
-  font-size: 11px;
-  color: #606060;
+  font-size: 10.5px;
+  color: #909090;
 }
+
+/* ----- Abo-Spalte (schmaler, eigener Abstand) ----------------------------- */
+.ytsr-header-cell-subs {
+  flex: 0 0 var(--ytsr-subs-width);
+  margin-left: var(--ytsr-subs-gap);
+}
+.ytsr-subs-cell {
+  flex: 0 0 var(--ytsr-subs-width);
+  margin-left: var(--ytsr-subs-gap);
+}
+.ytsr-subs-cell .ytsr-subs-val {
+  font-weight: 600;
+  font-size: 13.5px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+}
+.ytsr-subs-cell.ytsr-subs-pos .ytsr-subs-val { color: var(--ytsr-like); }
+.ytsr-subs-cell.ytsr-subs-neg .ytsr-subs-val { color: var(--ytsr-dislike); }
+.ytsr-subs-cell.ytsr-pending .ytsr-subs-val { opacity: 0.6; }
 
 /* Solange Dislikes noch geladen werden: Balken neutral, dezent gedämpft. */
 .ytsr-cell.ytsr-pending .ytsr-bar { background: #e0e0e0; }
@@ -92,6 +118,7 @@ ytcp-table-header .tablecell-video {
 
 /* Dark Mode (Studio setzt dark-Attribute auf <html>/<body>). */
 html[dark] .ytsr-cell, body[dark] .ytsr-cell { color: #f1f1f1; }
+html[dark] .ytsr-cell .ytsr-nums, body[dark] .ytsr-cell .ytsr-nums { color: #f5f5f5; }
 html[dark] .ytsr-cell .ytsr-pct, body[dark] .ytsr-cell .ytsr-pct,
 html[dark] .ytsr-header-cell, body[dark] .ytsr-header-cell { color: #aaa; }
 html[dark] .ytsr-cell.ytsr-pending .ytsr-bar,

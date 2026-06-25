@@ -28,6 +28,18 @@
     "message": "Loading dislikes …",
     "description": "Tooltip while dislikes are not loaded yet."
   },
+  "columnHeaderSubs": {
+    "message": "Subscribers (total)",
+    "description": "Header of the subscribers column."
+  },
+  "columnLoadingSubs": {
+    "message": "Loading subscribers …",
+    "description": "Tooltip while the subscriber count is not loaded yet."
+  },
+  "subsTooltip": {
+    "message": "Subscribers (net, since publication)",
+    "description": "Tooltip explanation of the subscriber number."
+  },
   "debugMode": {
     "message": "Debug mode"
   },

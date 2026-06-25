@@ -1,15 +1,17 @@
 /*
- * content.js (isolierte Welt) - Version 1.0.0
- * Fügt eine eigene Tabellenspalte "Likes (vs. Dislikes)" rechts nach
- * "Kommentare" ein: Titel in der Kopfzeile, pro Video eine Zelle mit
- * Verhältnis-Balken + Zahlen. Einhängen robust über die Video-Links.
+ * content.js (isolierte Welt) - Version 1.1.0
+ * Fügt zwei eigene Tabellenspalten rechts nach "Kommentare" ein:
+ *  1) "Likes (vs. Dislikes)" - Verhältnis-Balken + Zahlen.
+ *  2) "Abos (gesamt)" - Netto-Abos seit Veröffentlichung pro Video.
+ * Einhängen robust über die Video-Links.
  */
 (function () {
   "use strict";
 
   const VERSION = chrome.runtime?.getManifest?.().version || "?";
-  const store = new Map(); // videoId -> { likes, dislikes }
+  const store = new Map(); // videoId -> { likes, dislikes, subscribers }
   const requestedDislikes = new Set(); // bereits aktiv angefragte IDs (Dedupe)
+  const requestedSubs = new Set();     // dito fuer den Abo-Abruf
   let enabled = true;
   let debug = false;
 
@@ -18,6 +20,8 @@
   };
   const COL_HEADER = t("columnHeader", "Likes (vs. Dislikes)");
   const COL_LOADING = t("columnLoading", "Dislikes werden geladen …");
+  const SUBS_HEADER = t("columnHeaderSubs", "Abos (gesamt)");
+  const SUBS_LOADING = t("columnLoadingSubs", "Abos werden geladen …");
 
   // Einstellungen
   chrome.storage?.local.get(["enabled", "debug"], (cfg) => {
@@ -43,7 +47,8 @@
       const prev = store.get(r.videoId) || {};
       store.set(r.videoId, {
         likes: r.likes != null ? r.likes : prev.likes,
-        dislikes: r.dislikes != null ? r.dislikes : prev.dislikes
+        dislikes: r.dislikes != null ? r.dislikes : prev.dislikes,
+        subscribers: r.subscribers != null ? r.subscribers : prev.subscribers
       });
       changed = true;
     }
@@ -63,8 +68,47 @@
     }
   }
 
+  // Abos sind teuer (1 Analytics-Request pro Video) -> nur fuer aktuell sichtbare
+  // Videos anfragen und jede ID genau einmal pro Sitzung.
+  function requestMissingSubscribers(visibleIds) {
+    if (!enabled) return;
+    const need = [];
+    for (const id of visibleIds) {
+      const data = store.get(id);
+      if (data && data.subscribers == null && !requestedSubs.has(id)) {
+        requestedSubs.add(id);
+        need.push(id);
+      }
+    }
+    if (need.length) {
+      window.dispatchEvent(new CustomEvent("ytsr:fetchSubscribers", { detail: { videoIds: need } }));
+    }
+  }
+
   // ----- Zahlen & Prozent ----------------------------------------------------
-  function fmt(n) { return (n != null ? n : 0).toLocaleString("de-DE"); }
+  // Zahlenformat nach UI-Sprache (Fallback Deutsch).
+  const NUM_LOCALE = (() => {
+    try { return chrome.i18n?.getUILanguage?.() || "de-DE"; } catch (e) { return "de-DE"; }
+  })();
+  // Dezimaltrennzeichen des Locales ("," bei DE, "." bei EN).
+  const DECIMAL_SEP = (1.1).toLocaleString(NUM_LOCALE).replace(/[0-9]/g, "") || ".";
+  const nfFull = new Intl.NumberFormat(NUM_LOCALE);
+  // Kompakt-Suffixe (K/M/B) gibt es nur im englischen Format zuverlässig; das
+  // Dezimaltrennzeichen tauschen wir danach aufs UI-Locale (-> "49,3K", "2,1M").
+  const nfCompact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+
+  // Exakt mit Tausendertrennung (für Tooltip): 1204 -> "1.204".
+  function fmt(n) { return nfFull.format(n != null ? n : 0); }
+  // Kompakt für die Zelle: < 10.000 exakt, darüber K/M (49300 -> "49,3K").
+  function fmtShort(n) {
+    n = n != null ? n : 0;
+    return Math.abs(n) >= 10000 ? nfCompact.format(n).replace(".", DECIMAL_SEP) : fmt(n);
+  }
+  // Mit Vorzeichen (für Netto-Werte): +1.234 / −5 / 0.
+  function fmtSigned(n, formatter) {
+    n = n != null ? n : 0;
+    return (n > 0 ? "+" : n < 0 ? "−" : "") + formatter(Math.abs(n));
+  }
   function pctLiked(data) {
     const likes = data.likes != null ? data.likes : 0;
     const total = likes + (data.dislikes || 0);
@@ -87,8 +131,8 @@
     const fill = cell.querySelector(".ytsr-bar-fill");
     const pctEl = cell.querySelector(".ytsr-pct");
 
-    let numsText = "👍 " + fmt(data.likes);
-    if (hasDislikes) numsText += "  👎 " + fmt(data.dislikes);
+    let numsText = "👍 " + fmtShort(data.likes);
+    if (hasDislikes) numsText += "  👎 " + fmtShort(data.dislikes);
     if (nums.textContent !== numsText) nums.textContent = numsText;
 
     fill.style.width = fillPct + "%";
@@ -102,13 +146,37 @@
 
   function makeCell(id, data) {
     const cell = document.createElement("div");
-    cell.className = "ytsr-cell";
+    cell.className = "ytsr-cell ytsr-likes-cell";
     cell.dataset.ytsrFor = id;
     cell.innerHTML =
       '<div class="ytsr-nums"></div>' +
       '<div class="ytsr-bar"><div class="ytsr-bar-fill"></div></div>' +
       '<div class="ytsr-pct"></div>';
     fillCell(cell, data);
+    return cell;
+  }
+
+  // ----- Abo-Zelle (Netto-Abos seit Veröffentlichung) -----------------------
+  function fillSubsCell(cell, data) {
+    const has = data.subscribers != null;
+    const valEl = cell.querySelector(".ytsr-subs-val");
+    const txt = has ? "👥 " + fmtSigned(data.subscribers, fmtShort) : "👥 …";
+    if (valEl.textContent !== txt) valEl.textContent = txt;
+    cell.classList.toggle("ytsr-pending", !has);
+    cell.classList.toggle("ytsr-subs-pos", has && data.subscribers > 0);
+    cell.classList.toggle("ytsr-subs-neg", has && data.subscribers < 0);
+    cell.title = has
+      ? "👥 " + fmtSigned(data.subscribers, fmt) + " — " +
+        t("subsTooltip", "Abonnenten (netto, seit Veröffentlichung)")
+      : SUBS_LOADING;
+  }
+
+  function makeSubsCell(id, data) {
+    const cell = document.createElement("div");
+    cell.className = "ytsr-cell ytsr-subs-cell";
+    cell.dataset.ytsrFor = id;
+    cell.innerHTML = '<div class="ytsr-subs-val"></div>';
+    fillSubsCell(cell, data);
     return cell;
   }
 
@@ -141,11 +209,19 @@
 
   function ensureHeaderCell() {
     const header = findHeaderRow();
-    if (!header || header.querySelector(".ytsr-header-cell")) return;
-    const h = document.createElement("div");
-    h.className = "ytsr-header-cell";
-    h.textContent = COL_HEADER;
-    header.appendChild(h);
+    if (!header) return;
+    if (!header.querySelector(".ytsr-header-cell-likes")) {
+      const h = document.createElement("div");
+      h.className = "ytsr-header-cell ytsr-header-cell-likes";
+      h.textContent = COL_HEADER;
+      header.appendChild(h);
+    }
+    if (!header.querySelector(".ytsr-header-cell-subs")) {
+      const h = document.createElement("div");
+      h.className = "ytsr-header-cell ytsr-header-cell-subs";
+      h.textContent = SUBS_HEADER;
+      header.appendChild(h);
+    }
   }
 
   function removeHeaderCell() {
@@ -153,6 +229,18 @@
   }
 
   // ----- Aufbau & Pflege -----------------------------------------------------
+  // Eine Spalten-Zelle (per Modifier-Klasse) im Container sicherstellen/pflegen.
+  function ensureColumnCell(container, id, data, modifierClass, make, fill) {
+    let cell = container.querySelector("." + modifierClass);
+    if (cell && cell.dataset.ytsrFor === id) {
+      fill(cell, data);
+    } else {
+      if (cell) cell.remove(); // gehoert zu altem Video (Recycling)
+      cell = make(id, data);
+      container.appendChild(cell);
+    }
+  }
+
   function refreshAll() {
     if (!enabled) return;
 
@@ -178,6 +266,7 @@
     });
 
     let withData = 0, placed = 0;
+    const visibleIds = [];
     byId.forEach(({ a }, id) => {
       const data = store.get(id);
       if (!data) return;
@@ -185,16 +274,14 @@
       const container = rowCellContainer(a);
       if (!container) return;
 
-      let cell = container.querySelector(".ytsr-cell");
-      if (cell && cell.dataset.ytsrFor === id) {
-        fillCell(cell, data);
-      } else {
-        if (cell) cell.remove(); // gehoert zu altem Video (Recycling)
-        cell = makeCell(id, data);
-        container.appendChild(cell);
-      }
+      ensureColumnCell(container, id, data, "ytsr-likes-cell", makeCell, fillCell);
+      ensureColumnCell(container, id, data, "ytsr-subs-cell", makeSubsCell, fillSubsCell);
+      visibleIds.push(id);
       placed++;
     });
+
+    // Abos nur fuer aktuell sichtbare Videos nachladen (sparsam).
+    requestMissingSubscribers(visibleIds);
 
     if (debug) {
       console.log("[YTSR] Spaltenzellen: " + placed + " gesetzt / " + withData +
