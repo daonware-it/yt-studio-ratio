@@ -1,41 +1,298 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <style>
-    body { width: 260px; margin: 0; font: 13px/1.5 "Roboto", Arial, sans-serif; color: #0f0f0f; }
-    header { background: #cc0000; color: #fff; padding: 12px 14px; font-weight: 600; }
-    .body { padding: 14px; }
-    .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .hint { font-size: 11px; color: #606060; margin-top: 2px; }
-    label.switch { position: relative; display: inline-block; width: 38px; height: 22px; }
-    label.switch input { display: none; }
-    .slider { position: absolute; inset: 0; background: #ccc; border-radius: 22px; transition: .2s; }
-    .slider::before { content: ""; position: absolute; height: 16px; width: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
-    input:checked + .slider { background: #2ba640; }
-    input:checked + .slider::before { transform: translateX(16px); }
-    a { color: #065fd4; }
+    :root {
+      --bg-color: #0f0f0f;
+      --card-bg: #1f1f1f;
+      --card-hover: #282828;
+      --border-color: #2d2d2d;
+      --border-hover: #3f3f3f;
+      --text-main: #f1f1f1;
+      --text-sub: #aaaaaa;
+      --yt-red: #ff0000;
+      --success-color: #2ba640;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      width: 320px;
+      margin: 0;
+      font-family: var(--font-stack);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, rgba(255, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    header .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    header .logo-svg {
+      color: var(--yt-red);
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.4));
+    }
+
+    header .title {
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+    }
+
+    header .ver {
+      font-size: 10px;
+      font-weight: 600;
+      background: var(--card-bg);
+      color: var(--text-sub);
+      border: 1px solid var(--border-color);
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .body {
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      background-color: var(--card-hover);
+    }
+
+    .card-content {
+      flex: 1;
+      padding-right: 4px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* Custom Toggle Switch */
+    label.switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+      flex: none;
+      cursor: pointer;
+    }
+
+    label.switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background-color: #3f3f3f;
+      border-radius: 22px;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      top: 3px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    input:checked + .slider {
+      background-color: var(--success-color);
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(16px);
+    }
+
+    .debug-hint {
+      display: none;
+      font-size: 11px;
+      color: #f0a020;
+      line-height: 1.45;
+      background: rgba(240, 160, 32, 0.08);
+      border: 1px solid rgba(240, 160, 32, 0.2);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: -4px 0 12px;
+      animation: slideDown 0.2s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .debug-hint code {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 1px 4px;
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 11px;
+      color: #ffffff;
+    }
+
+    body.debug-on .debug-hint {
+      display: block;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 4px 0 14px;
+    }
+
+    .info-card .hint {
+      color: var(--text-sub);
+      line-height: 1.45;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 8px 0 12px;
+    }
+
+    .links {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .links a {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .links a:hover {
+      background-color: var(--card-hover);
+      border-color: var(--border-hover);
+    }
+
+    .footer {
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2px;
+    }
+
+    .footer .author {
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
-  <header data-i18n="popupHeader">Like / Dislike Ratio</header>
+  <header>
+    <div class="brand">
+      <svg class="logo-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+      </svg>
+      <span class="title" data-i18n="popupHeader">Like / Dislike Ratio</span>
+    </div>
+    <span class="ver" id="version">v—</span>
+  </header>
   <div class="body">
-    <div class="row">
-      <div>
-        <div data-i18n="displayActive">Display active</div>
+    <div class="card">
+      <div class="card-content">
+        <div class="card-title" data-i18n="displayActive">Display active</div>
         <div class="hint" data-i18n="displayActiveHint">Column in the Content tab</div>
       </div>
-      <label class="switch"><input type="checkbox" id="enabled" checked /><span class="slider"></span></label>
+      <label class="switch">
+        <input type="checkbox" id="enabled" checked />
+        <span class="slider"></span>
+      </label>
     </div>
-    <div class="row">
-      <div>
-        <div data-i18n="debugMode">Debug mode</div>
+
+    <div class="card">
+      <div class="card-content">
+        <div class="card-title" data-i18n="debugMode">Debug mode</div>
         <div class="hint" data-i18n="debugModeHint">Raw data to the console</div>
       </div>
-      <label class="switch"><input type="checkbox" id="debug" /><span class="slider"></span></label>
+      <label class="switch">
+        <input type="checkbox" id="debug" />
+        <span class="slider"></span>
+      </label>
     </div>
-    <div class="hint" data-i18n="footerHint">
-      Shows data from your own signed-in channel only. Reload the Content tab if nothing appears.
+
+    <div class="debug-hint" data-i18n="popupDebugActiveHint">
+      Reload the Content tab, open the console (F12) and filter for [YTSR]. Then send me the output via "Report an issue".
+    </div>
+
+    <div class="info-card">
+      <div class="hint" data-i18n="footerHint">
+        Shows data from your own signed-in channel only. Reload the Content tab if nothing appears.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="links">
+      <a href="#" id="help" data-i18n="popupHelp">How it works</a>
+      <a href="#" id="report" target="_blank" rel="noopener" data-i18n="popupReport">Report an issue</a>
+    </div>
+    <div class="footer">
+      <span class="author" data-i18n="popupMadeBy">by daonware</span>
+      <span id="versionFoot"></span>
     </div>
   </div>
   <script src="popup.js"></script>

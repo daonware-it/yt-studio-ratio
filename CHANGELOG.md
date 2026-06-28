@@ -8,6 +8,27 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unveröffentlicht]
 
+## [1.2.0] - 2026-06-28
+
+### Hinzugefügt
+- **Willkommens-/Hilfeseite bei der Erstinstallation**: Ein neuer
+  Hintergrund-Worker (`src/background.js`) öffnet beim ersten Installieren
+  automatisch eine lokalisierte Seite (`welcome/`). Sie erklärt, dass die
+  Erweiterung bereits aktiv ist, wo die Spalten erscheinen (Inhalte-Tab), wie
+  man sie im Popup an-/ausschaltet und wie man mit dem Debug-Modus einen Report
+  erstellt – inklusive Link zum Issue-Tracker. Öffnet nur eine eigene Seite,
+  daher **keine zusätzlichen Berechtigungen**.
+- Neue `welcome`- und `popup`-Strings in `_locales` (Deutsch und Englisch).
+
+### Geändert
+- **Popup überarbeitet**: zeigt die **Versionsnummer** (im Header und Fuß),
+  einen Link **„So funktioniert's"** (öffnet die Willkommensseite erneut) und
+  **„Problem melden"** (Issue-Tracker). Bei aktivem Debug-Modus erscheint ein
+  kontextbezogener Hinweis, wie man die Konsolen-Ausgabe für einen Report findet.
+- `manifest.json` erhält einen `background.service_worker`; `scripts/build.mjs`
+  kopiert den `welcome`-Ordner mit und schreibt den Hintergrund-Schlüssel für
+  Firefox auf eine Event-Page (`background.scripts`) um.
+
 ## [1.1.0] - 2026-06-25
 
 ### Hinzugefügt
@@ -57,7 +78,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - Lokalisierung Deutsch und Englisch (`_locales`).
 - Englische README und Sprachumschalter.
 
-[Unveröffentlicht]: https://github.com/daonware-it/yt-studio-ratio/compare/v1.1.0...HEAD
+[Unveröffentlicht]: https://github.com/daonware-it/yt-studio-ratio/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/daonware-it/yt-studio-ratio/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/daonware-it/yt-studio-ratio/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/daonware-it/yt-studio-ratio/compare/v0.7.0...v1.0.0
 [0.7.0]: https://github.com/daonware-it/yt-studio-ratio/releases/tag/v0.7.0

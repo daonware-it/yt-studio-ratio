@@ -16,6 +16,13 @@ subscribers each video gained net since it was published.
   <img src="IMAGE/popup-de.png" alt="Settings popup (German)" width="280">
 </p>
 
+On first install a short welcome page opens automatically, explaining that the
+extension is already active and how to send a report if something is missing:
+
+<p align="center">
+  <img src="IMAGE/welcome-en.png" alt="Welcome page after installation" width="420">
+</p>
+
 ## How it works (and why it's harmless)
 
 - The extension only runs on `studio.youtube.com`.
@@ -66,8 +73,11 @@ empty:
 
 Send me the console output and I'll fine-tune the field mapping exactly.
 
-## Current state (v1.1.0)
+u## Current state (v1.2.0)
 
+- **Welcome page on first install**: automatically explains that the extension
+  is already active, where the columns appear, how to toggle them in the popup,
+  and how to send a report via Debug mode — without any extra permissions.
 - Adds its own **"Likes (vs. Dislikes)" column** on the far right of the content
   tab, after "Comments" — title in the header, one cell per video with 👍/👎
   numbers, a **two-color ratio bar** (green = likes, red = dislikes) and
@@ -92,7 +102,9 @@ manifest.json        – configuration (Manifest V3, Chrome base)
 scripts/build.mjs    – produces per-browser packages in dist/
 src/inject.js        – reads network responses & fetches dislikes/subscribers
 src/content.js       – builds both columns into the header and video rows
+src/background.js    – opens the welcome page on first install
 src/styles.css       – appearance of the columns (bar, colors, spacing)
 popup/               – small settings popup (on/off, debug)
+welcome/             – welcome / help page (shown after installation)
 icons/               – icons
 ```

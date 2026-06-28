@@ -17,6 +17,14 @@ Veröffentlichung gebracht hat.
   <img src="IMAGE/popup-en.png" alt="Settings popup (English)" width="280">
 </p>
 
+Beim ersten Installieren öffnet sich automatisch eine kurze Willkommensseite, die
+erklärt, dass die Erweiterung bereits aktiv ist und wie man bei Problemen einen
+Report schickt:
+
+<p align="center">
+  <img src="IMAGE/welcome-de.png" alt="Willkommensseite nach der Installation" width="420">
+</p>
+
 ## Wie es funktioniert (und warum es unbedenklich ist)
 
 - Die Erweiterung läuft nur auf `studio.youtube.com`.
@@ -67,8 +75,12 @@ bleibt:
 
 Schick mir die Konsolen-Ausgabe, dann passe ich die Feld-Zuordnung exakt an.
 
-## Aktueller Stand (v1.1.0)
+## Aktueller Stand (v1.2.0)
 
+- **Willkommensseite bei der Erstinstallation**: erklärt automatisch, dass die
+  Erweiterung bereits aktiv ist, wo die Spalten erscheinen, wie man sie im Popup
+  schaltet und wie man per Debug-Modus einen Report schickt – ohne zusätzliche
+  Berechtigungen.
 - Fügt im Inhalte-Tab eine **eigene Spalte „Likes (vs. Dislikes)"** ganz rechts
   nach „Kommentare" ein – Titel in der Kopfzeile, pro Video eine Zelle mit
   👍/👎-Zahlen, **zweifarbigem Verhältnis-Balken** (grün = Likes, rot = Dislikes)
@@ -93,7 +105,9 @@ manifest.json        – Konfiguration (Manifest V3, Chrome-Basis)
 scripts/build.mjs    – erzeugt browserspezifische Pakete in dist/
 src/inject.js        – liest Netzwerk-Antworten mit & lädt Dislikes/Abos nach
 src/content.js       – baut beide Spalten in Kopfzeile und Video-Zeilen ein
+src/background.js    – öffnet bei Erstinstallation die Willkommensseite
 src/styles.css       – Aussehen der Spalten (Balken, Farben, Abstände)
 popup/               – kleines Einstellungs-Popup (An/Aus, Debug)
+welcome/             – Willkommens-/Hilfeseite (erscheint nach der Installation)
 icons/               – Icons
 ```

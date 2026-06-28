@@ -48,5 +48,77 @@
   },
   "footerHint": {
     "message": "Zeigt nur die Daten deines eigenen, angemeldeten Kanals. Lade den Inhalte-Tab neu, falls nichts erscheint."
+  },
+  "popupDebugActiveHint": {
+    "message": "Inhalte-Tab neu laden, Konsole (F12) öffnen und nach [YTSR] filtern. Schick mir die Ausgabe dann über „Problem melden\"."
+  },
+  "popupHelp": {
+    "message": "So funktioniert's"
+  },
+  "popupReport": {
+    "message": "Problem melden"
+  },
+  "popupMadeBy": {
+    "message": "von daonware"
+  },
+  "welcomeTitle": {
+    "message": "Danke für die Installation!"
+  },
+  "welcomeSubtitle": {
+    "message": "YT Studio Like/Dislike Ratio"
+  },
+  "welcomeActiveBadge": {
+    "message": "Bereits aktiv"
+  },
+  "welcomeActiveTitle": {
+    "message": "Du musst nichts einschalten"
+  },
+  "welcomeActiveBody": {
+    "message": "Die Erweiterung ist direkt nach der Installation automatisch aktiv. Du musst nichts aktivieren – öffne einfach YouTube Studio."
+  },
+  "welcomeWhereTitle": {
+    "message": "Wo die Daten erscheinen"
+  },
+  "welcomeWhereBody": {
+    "message": "Öffne YouTube Studio und gehe in den Tab „Inhalte\" (die Videoliste). Rechts werden zwei zusätzliche Spalten eingefügt: „Likes (vs. Dislikes)\" und „Abos (gesamt)\". Die Werte laden nach kurzer Zeit – lade den Tab neu, falls nichts erscheint."
+  },
+  "welcomeOpenStudio": {
+    "message": "YouTube Studio öffnen"
+  },
+  "welcomeToggleTitle": {
+    "message": "Ein- oder ausschalten"
+  },
+  "welcomeToggleBody": {
+    "message": "Klicke auf das Erweiterungs-Symbol in der Browser-Leiste, um das Einstellungs-Popup zu öffnen. Dort kannst du die Anzeige an-/ausschalten. Standardmäßig ist sie an. Tipp: Pinne das Symbol an, damit es immer sichtbar ist."
+  },
+  "welcomeDebugTitle": {
+    "message": "Etwas fehlt? Schick einen Report"
+  },
+  "welcomeDebugBody": {
+    "message": "YouTube ändert seine internen Daten manchmal ohne Vorwarnung. Falls eine Spalte leer bleibt, hilft der Debug-Modus mir bei der Korrektur:"
+  },
+  "welcomeDebugStep1": {
+    "message": "Klicke auf das Erweiterungs-Symbol und schalte den Debug-Modus ein."
+  },
+  "welcomeDebugStep2": {
+    "message": "Lade den Inhalte-Tab neu und öffne die Entwicklerkonsole mit F12."
+  },
+  "welcomeDebugStep3": {
+    "message": "Filtere die Konsole nach [YTSR]."
+  },
+  "welcomeDebugStep4": {
+    "message": "Kopiere die Ausgabe und schick sie mir über den GitHub-Issue-Tracker."
+  },
+  "welcomeReportLink": {
+    "message": "Issue-Tracker öffnen"
+  },
+  "welcomePrivacyTitle": {
+    "message": "Deine Daten bleiben bei dir"
+  },
+  "welcomePrivacyBody": {
+    "message": "Alles läuft in deiner eigenen, angemeldeten Sitzung. Die Erweiterung zeigt nur die Zahlen deines eigenen Kanals und sendet nichts an einen Server oder Dritte."
+  },
+  "welcomeFooter": {
+    "message": "Du kannst diesen Tab schließen – die Erweiterung ist einsatzbereit."
   }
 }

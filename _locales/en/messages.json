@@ -48,5 +48,77 @@
   },
   "footerHint": {
     "message": "Shows data from your own signed-in channel only. Reload the Content tab if nothing appears."
+  },
+  "popupDebugActiveHint": {
+    "message": "Reload the Content tab, open the console (F12) and filter for [YTSR]. Then send me the output via \"Report an issue\"."
+  },
+  "popupHelp": {
+    "message": "How it works"
+  },
+  "popupReport": {
+    "message": "Report an issue"
+  },
+  "popupMadeBy": {
+    "message": "by daonware"
+  },
+  "welcomeTitle": {
+    "message": "Thanks for installing!"
+  },
+  "welcomeSubtitle": {
+    "message": "YT Studio Like/Dislike Ratio"
+  },
+  "welcomeActiveBadge": {
+    "message": "Already on"
+  },
+  "welcomeActiveTitle": {
+    "message": "Nothing to switch on"
+  },
+  "welcomeActiveBody": {
+    "message": "The extension is active automatically right after installation. You don't need to enable anything — just open YouTube Studio."
+  },
+  "welcomeWhereTitle": {
+    "message": "Where the data appears"
+  },
+  "welcomeWhereBody": {
+    "message": "Go to YouTube Studio and open the Content tab (the video list). Two extra columns are added on the right: \"Likes (vs. Dislikes)\" and \"Subscribers (total)\". The values load within a moment — reload the tab if nothing shows up."
+  },
+  "welcomeOpenStudio": {
+    "message": "Open YouTube Studio"
+  },
+  "welcomeToggleTitle": {
+    "message": "Turn it on or off"
+  },
+  "welcomeToggleBody": {
+    "message": "Click the extension icon in the browser toolbar to open the settings popup. There you can toggle the display on/off. It is on by default. Tip: pin the icon so it's always visible."
+  },
+  "welcomeDebugTitle": {
+    "message": "Something missing? Send a report"
+  },
+  "welcomeDebugBody": {
+    "message": "YouTube sometimes changes its internal data without notice. If a column stays empty, the Debug mode helps me fix it:"
+  },
+  "welcomeDebugStep1": {
+    "message": "Click the extension icon and switch on Debug mode."
+  },
+  "welcomeDebugStep2": {
+    "message": "Reload the Content tab and open the developer console with F12."
+  },
+  "welcomeDebugStep3": {
+    "message": "Filter the console for [YTSR]."
+  },
+  "welcomeDebugStep4": {
+    "message": "Copy the output and send it to me via the GitHub issue tracker."
+  },
+  "welcomeReportLink": {
+    "message": "Open the issue tracker"
+  },
+  "welcomePrivacyTitle": {
+    "message": "Your data stays with you"
+  },
+  "welcomePrivacyBody": {
+    "message": "Everything runs inside your own signed-in session. The extension shows only your own channel's numbers and sends nothing to any server or third party."
+  },
+  "welcomeFooter": {
+    "message": "You can close this tab — the extension is ready to use."
   }
 }

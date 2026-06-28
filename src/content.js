@@ -1,5 +1,5 @@
 /*
- * content.js (isolierte Welt) - Version 1.1.0
+ * content.js (isolierte Welt) - Version 1.2.0
  * Fügt zwei eigene Tabellenspalten rechts nach "Kommentare" ein:
  *  1) "Likes (vs. Dislikes)" - Verhältnis-Balken + Zahlen.
  *  2) "Abos (gesamt)" - Netto-Abos seit Veröffentlichung pro Video.

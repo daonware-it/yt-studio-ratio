@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YT Studio Like/Dislike Ratio</title>
+  <style>
+    :root {
+      --bg-color: #0c0c0e;
+      --card-bg: #16161a;
+      --card-hover: #1e1e24;
+      --border-color: #27272a;
+      --border-hover: #3f3f46;
+      --text-main: #f4f4f5;
+      --text-sub: #a1a1aa;
+      --yt-red: #ff0000;
+      --yt-red-glow: rgba(255, 0, 0, 0.35);
+      --success-color: #34d399;
+      --success-bg: rgba(52, 211, 153, 0.1);
+      --success-border: rgba(52, 211, 153, 0.2);
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 0 0 60px;
+      font-family: var(--font-stack);
+      background-color: var(--bg-color);
+      background-image: radial-gradient(circle at top, rgba(255, 0, 0, 0.05) 0%, rgba(12, 12, 14, 0) 60%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 0 24px;
+    }
+
+    header .logo-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, rgba(255,0,0,0.1) 0%, rgba(255,0,0,0.2) 100%);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      border-radius: 20px;
+      color: var(--yt-red);
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(255, 0, 0, 0.15);
+      filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.2));
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(180deg, #ffffff 0%, #d4d4d8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-hover);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      color: var(--yt-red);
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.3));
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--text-sub);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--success-bg);
+      color: var(--success-color);
+      border: 1px solid var(--success-border);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Step List */
+    ol {
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: steps-counter;
+    }
+
+    ol li {
+      position: relative;
+      margin-bottom: 12px;
+      padding-left: 36px;
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    ol li::before {
+      content: counter(steps-counter);
+      counter-increment: steps-counter;
+      position: absolute;
+      left: 0;
+      top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background-color: var(--border-color);
+      border: 1px solid var(--border-hover);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    code {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 12.5px;
+      color: #fff;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 32px 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(180deg, #ff1a1a 0%, #cc0000 100%);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(255, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1) inset;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--yt-red-glow), 0 0 0 1px rgba(255,255,255,0.15) inset;
+      filter: brightness(1.05);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn svg {
+      transition: transform 0.2s ease;
+    }
+    
+    .btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    .foot {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 40px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 24px;
+    }
+
+    a {
+      color: #38bdf8;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    a:hover {
+      color: #7dd3fc;
+      text-decoration: underline;
+    }
+    
+    /* Top prominent card specific styling */
+    .welcome-status-card {
+      border: 1px solid var(--border-color);
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.03) 0%, rgba(22, 22, 26, 0.8) 100%);
+    }
+    
+    .welcome-status-card:hover {
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo-container">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+        </svg>
+      </div>
+      <h1 data-i18n="welcomeTitle">Thanks for installing!</h1>
+      <p data-i18n="welcomeSubtitle">YT Studio Like/Dislike Ratio</p>
+    </header>
+
+    <div class="card welcome-status-card">
+      <div class="card-header">
+        <span class="badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span data-i18n="welcomeActiveBadge">Already on</span>
+        </span>
+        <h2 data-i18n="welcomeActiveTitle">Nothing to switch on</h2>
+      </div>
+      <p data-i18n="welcomeActiveBody">The extension is active automatically right after installation. You don't need to enable anything — just open YouTube Studio.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <h2 data-i18n="welcomeWhereTitle">Where the data appears</h2>
+      </div>
+      <p data-i18n="welcomeWhereBody">Go to YouTube Studio and open the <b>Content</b> tab (the video list). Two extra columns are added on the right: <b>Likes (vs. Dislikes)</b> and <b>Subscribers (total)</b>. The values load within a moment — reload the tab if nothing shows up.</p>
+    </div>
+
+    <div class="actions">
+      <a class="btn" id="openStudio" href="https://studio.youtube.com/" target="_blank" rel="noopener">
+        <span data-i18n="welcomeOpenStudio">Open YouTube Studio</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="12" rx="6" ry="6"></rect>
+          <circle cx="16" cy="12" r="3"></circle>
+        </svg>
+        <h2 data-i18n="welcomeToggleTitle">Turn it on or off</h2>
+      </div>
+      <p data-i18n="welcomeToggleBody">Click the extension icon in the browser toolbar to open the settings popup. There you can toggle the display on/off. It is on by default. (Tip: pin the icon so it's always visible.)</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          <circle cx="12" cy="12" r="6"></circle>
+        </svg>
+        <h2 data-i18n="welcomeDebugTitle">Something missing? Send a report</h2>
+      </div>
+      <p data-i18n="welcomeDebugBody">YouTube sometimes changes its internal data without notice. If a column stays empty, the Debug mode helps me fix it:</p>
+      <ol>
+        <li data-i18n="welcomeDebugStep1">Click the extension icon and switch on <b>Debug mode</b>.</li>
+        <li data-i18n="welcomeDebugStep2">Reload the Content tab and open the developer console with <code>F12</code>.</li>
+        <li data-i18n="welcomeDebugStep3">Filter the console for <code>[YTSR]</code>.</li>
+        <li data-i18n="welcomeDebugStep4">Copy the output and send it to me via the GitHub issue tracker.</li>
+      </ol>
+      <p style="margin-top:16px">
+        <a id="reportLink" href="https://github.com/daonware-it/yt-studio-ratio/issues" target="_blank" rel="noopener" data-i18n="welcomeReportLink">Open the issue tracker</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <h2 data-i18n="welcomePrivacyTitle">Your data stays with you</h2>
+      </div>
+      <p data-i18n="welcomePrivacyBody">Everything runs inside your own signed-in session. The extension shows only your own channel's numbers and sends nothing to any server or third party.</p>
+    </div>
+
+    <p class="foot" data-i18n="welcomeFooter">You can close this tab — the extension is ready to use.</p>
+  </div>
+  <script src="welcome.js"></script>
+</body>
+</html>

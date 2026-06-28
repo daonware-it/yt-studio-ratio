@@ -16,7 +16,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
 
 // Dateien/Ordner, die in jedes Paket kopiert werden.
-const SHARED = ["icons", "popup", "src", "_locales"];
+const SHARED = ["icons", "popup", "welcome", "src", "_locales"];
 
 // Firefox-Add-on-ID: frei waehlbar (E-Mail- oder UUID-Form). Hier stabil halten,
 // damit Updates/Einstellungen erhalten bleiben.
@@ -39,6 +39,11 @@ function toFirefoxManifest(base) {
       data_collection_permissions: { required: ["none"] }
     }
   };
+  // Firefox MV3 nutzt fuer den Hintergrund eine Event-Page (scripts) statt eines
+  // service_worker. Den Chrome-Schluessel entsprechend umschreiben.
+  if (m.background && m.background.service_worker) {
+    m.background = { scripts: [m.background.service_worker] };
+  }
   return m;
 }
 
